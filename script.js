@@ -70,6 +70,8 @@ async function sendMessage(message) {
         }
         
         const data = await response.json();
+
+	console.log("Backend response:", data);
         
         removeElement(typingIndicator);
         
