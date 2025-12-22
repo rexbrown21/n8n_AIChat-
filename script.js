@@ -1,4 +1,4 @@
-const WEBHOOK_URL = "https://lickerishly-evaporative-whitley.ngrok-free.dev/webhook/31fa19ab-7edf-4c5b-8ea7-13656d5b51d6";
+const WEBHOOK_URL = "https://lickerishly-evaporative-whitley.ngrok-free.dev/webhook-test/31fa19ab-7edf-4c5b-8ea7-13656d5b51d6";
 
 const chatMessages = document.getElementById('chatMessages');
 const chatForm = document.getElementById('chatForm');
