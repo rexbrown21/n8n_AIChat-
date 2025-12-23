@@ -8,9 +8,23 @@ const sidebar = document.getElementById('sidebar');
 const sidebarToggle = document.getElementById('sidebarToggle');
 const conversationsList = document.getElementById('conversationsList');
 const newChatButton = document.getElementById('newChatButton');
+const themeToggle = document.getElementById('themeToggle');
 
 let currentConversationId = null;
 let conversations = {};
+
+// Theme management
+function initializeTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+    }
+}
+function toggleTheme() {
+    document.body.classList.toggle('light-mode');
+    const isLightMode = document.body.classList.contains('light-mode');
+    localStorage.setItem('theme', isLightMode ? 'light' : 'dark');
+}
 
 // Load conversations from localStorage
 function loadConversations() {
@@ -124,10 +138,17 @@ function createMessageElement(content, type) {
 function addMessage(content, type) {
     const messageElement = createMessageElement(content, type);
     chatMessages.appendChild(messageElement);
+
+    // Save to conversation
+    if (currentConversationId && conversations[currentConversationId]) {
+        conversations[currentConversationId].messages.push({ content, type });
+        saveConversations();
+    }
+    
     scrollToBottom();
     return messageElement;
 }
-
+    
 function scrollToBottom() {
     chatMessages.scrollTo({
         top: chatMessages.scrollHeight,
@@ -147,6 +168,7 @@ function setLoading(isLoading) {
 }
 
 async function sendMessage(message) {
+    updateConversationTitle(message);
     addMessage(message, 'user');
     
     const typingIndicator = addMessage('', 'typing');
@@ -189,6 +211,16 @@ async function sendMessage(message) {
         messageInput.focus();
     }
 }
+// Sidebar toggle
+sidebarToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('hidden');
+});
+
+// New chat button
+newChatButton.addEventListener('click', createNewConversation);
+
+// Theme toggle
+themeToggle.addEventListener('click', toggleTheme);
 
 chatForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -211,5 +243,13 @@ messageInput.addEventListener('keydown', (e) => {
     }
 });
 
+// Initialize
+initializeTheme();
+loadConversations();
+if (Object.keys(conversations).length === 0) {
+    createNewConversation();
+} else {
+    const firstConvId = Object.keys(conversations)[0];
+    loadConversation(firstConvId);
+}
 messageInput.focus();
-// test change
