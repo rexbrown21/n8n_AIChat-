@@ -8,30 +8,48 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">
-            <h1>AI Assistant</h1>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>Conversations</h2>
         </div>
-        
-        <div class="chat-messages" id="chatMessages">
+        <button class="new-chat-button" id="newChatButton">
+            + New Conversation
+        </button>
+        <div class="conversations-list" id="conversationsList">
         </div>
-        
-        <div class="chat-input-container">
-            <form id="chatForm" class="chat-form">
-                <input 
-                    type="text" 
-                    id="messageInput" 
-                    class="chat-input" 
-                    placeholder="Type your message..."
-                    autocomplete="off"
-                >
-                <button type="submit" class="send-button" id="sendButton">
-                    Send
-                </button>
-            </form>
+    </div>
+
+    <div class="main-wrapper">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+            ☰
+        </button>
+
+        <div class="chat-container">
+            <div class="chat-header">
+                <h1>AI Assistant</h1>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+            </div>
+            
+            <div class="chat-input-container">
+                <form id="chatForm" class="chat-form">
+                    <input 
+                        type="text" 
+                        id="messageInput" 
+                        class="chat-input" 
+                        placeholder="Type your message..."
+                        autocomplete="off"
+                    >
+                    <button type="submit" class="send-button" id="sendButton">
+                        Send
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
     
     <script src="script.js"></script>
 </body>
 </html>
+

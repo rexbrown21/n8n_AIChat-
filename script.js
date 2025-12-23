@@ -4,6 +4,103 @@ const chatMessages = document.getElementById('chatMessages');
 const chatForm = document.getElementById('chatForm');
 const messageInput = document.getElementById('messageInput');
 const sendButton = document.getElementById('sendButton');
+const sidebar = document.getElementById('sidebar');
+const sidebarToggle = document.getElementById('sidebarToggle');
+const conversationsList = document.getElementById('conversationsList');
+const newChatButton = document.getElementById('newChatButton');
+
+let currentConversationId = null;
+let conversations = {};
+
+// Load conversations from localStorage
+function loadConversations() {
+    const saved = localStorage.getItem('conversations');
+    if (saved) {
+        conversations = JSON.parse(saved);
+    }
+}
+
+// Save conversations to localStorage
+function saveConversations() {
+    localStorage.setItem('conversations', JSON.stringify(conversations));
+}
+
+// Create a new conversation
+function createNewConversation() {
+    const id = Date.now().toString();
+    conversations[id] = {
+        id,
+        title: 'New Conversation',
+        messages: [],
+        createdAt: new Date().toISOString()
+    };
+    
+    currentConversationId = id;
+    clearChat();
+    saveConversations();
+    renderConversations();
+    messageInput.focus();
+}
+
+// Load a conversation
+function loadConversation(conversationId) {
+    currentConversationId = conversationId;
+    clearChat();
+    
+    if (conversations[conversationId]) {
+        const conv = conversations[conversationId];
+        conv.messages.forEach(msg => {
+            const messageElement = createMessageElement(msg.content, msg.type);
+            chatMessages.appendChild(messageElement);
+        });
+    }
+    
+    scrollToBottom();
+    renderConversations();
+    messageInput.focus();
+    
+    // Close sidebar on mobile after selecting
+    if (window.innerWidth <= 768) {
+        sidebar.classList.add('hidden');
+    }
+}
+
+// Render conversations in sidebar
+function renderConversations() {
+    conversationsList.innerHTML = '';
+    
+    const sortedIds = Object.keys(conversations).sort((a, b) => {
+        return new Date(conversations[b].createdAt) - new Date(conversations[a].createdAt);
+    });
+    
+    sortedIds.forEach(id => {
+        const conv = conversations[id];
+        const item = document.createElement('button');
+        item.className = 'conversation-item';
+        if (id === currentConversationId) {
+            item.classList.add('active');
+        }
+        item.textContent = conv.title;
+        item.onclick = () => loadConversation(id);
+        conversationsList.appendChild(item);
+    });
+}
+
+// Update conversation title based on first user message
+function updateConversationTitle(message) {
+    if (currentConversationId && conversations[currentConversationId]) {
+        if (conversations[currentConversationId].title === 'New Conversation') {
+            conversations[currentConversationId].title = message.substring(0, 40) + 
+                (message.length > 40 ? '...' : '');
+            saveConversations();
+            renderConversations();
+        }
+    }
+}
+
+function clearChat() {
+    chatMessages.innerHTML = '';
+}
 
 function createMessageElement(content, type) {
     const messageDiv = document.createElement('div');
