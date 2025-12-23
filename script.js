@@ -69,14 +69,14 @@ async function sendMessage(message) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        const data = await response.json();
+        const text = await response.text();
 
-	console.log("Backend response:", data);
+	console.log("Backend response:", text);
         
         removeElement(typingIndicator);
         
-        if (data.reply) {
-            addMessage(data.reply, 'ai');
+        if (text && text.trim()) {
+            addMessage(text, 'ai');
         } else {
             addMessage('Received an empty response from AI.', 'error');
         }
