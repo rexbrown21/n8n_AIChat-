@@ -191,15 +191,15 @@ body {
 }
 
 .message.user {
-    background-color: #ffffff;
-    color: #0a0a0a;
+    background-color: #007AFF;
+    color: #ffffff;
     align-self: flex-end;
     border-bottom-right-radius: 4px;
 }
 
 .message.ai {
-    background-color: #1e1e1e;
-    color: #e0e0e0;
+    background-color: #E5E5EA;
+    color: #0a0a0a;
     align-self: flex-start;
     border-bottom-left-radius: 4px;
     border: 1px solid #2a2a2a;
