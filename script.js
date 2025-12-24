@@ -9,6 +9,11 @@ const sidebarToggle = document.getElementById('sidebarToggle');
 const conversationsList = document.getElementById('conversationsList');
 const newChatButton = document.getElementById('newChatButton');
 const themeToggle = document.getElementById('themeToggle');
+const themesButton = document.getElementById('themesButton');
+const wallpaperModal = document.getElementById('wallpaperModal');
+const wallpaperInput = document.getElementById('wallpaperInput');
+const removeWallpaperBtn = document.getElementById('removeWallpaperBtn');
+const closeWallpaperModal = document.getElementById('closeWallpaperModal');
 
 let currentConversationId = null;
 let conversations = {};
@@ -24,6 +29,24 @@ function toggleTheme() {
     document.body.classList.toggle('light-mode');
     const isLightMode = document.body.classList.contains('light-mode');
     localStorage.setItem('theme', isLightMode ? 'light' : 'dark');
+}
+
+// Wallpaper management
+function loadWallpaper() {
+    const savedWallpaper = localStorage.getItem('chatWallpaper');
+    if (savedWallpaper) {
+        chatMessages.style.backgroundImage = `url(${savedWallpaper})`;
+    }
+}
+
+function saveWallpaper(imageData) {
+    localStorage.setItem('chatWallpaper', imageData);
+    chatMessages.style.backgroundImage = `url(${imageData})`;
+}
+
+function removeWallpaper() {
+    localStorage.removeItem('chatWallpaper');
+    chatMessages.style.backgroundImage = 'none';
 }
 
 // Load conversations from localStorage
@@ -89,15 +112,48 @@ function renderConversations() {
     
     sortedIds.forEach(id => {
         const conv = conversations[id];
-        const item = document.createElement('button');
+        const item = document.createElement('div');
         item.className = 'conversation-item';
         if (id === currentConversationId) {
             item.classList.add('active');
         }
-        item.textContent = conv.title;
-        item.onclick = () => loadConversation(id);
+        
+        const contentSpan = document.createElement('span');
+        contentSpan.className = 'conversation-item-content';
+        contentSpan.textContent = conv.title;
+        contentSpan.onclick = () => loadConversation(id);
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'conversation-delete-btn';
+        deleteBtn.textContent = '×';
+        deleteBtn.onclick = (e) => {
+            e.stopPropagation();
+            deleteConversation(id);
+        };
+        
+        item.appendChild(contentSpan);
+        item.appendChild(deleteBtn);
         conversationsList.appendChild(item);
     });
+}
+
+// Delete a conversation
+function deleteConversation(conversationId) {
+    if (confirm('Are you sure you want to delete this conversation?')) {
+        delete conversations[conversationId];
+        saveConversations();
+        
+        if (currentConversationId === conversationId) {
+            const remaining = Object.keys(conversations);
+            if (remaining.length > 0) {
+                loadConversation(remaining[0]);
+            } else {
+                createNewConversation();
+            }
+        } else {
+            renderConversations();
+        }
+    }
 }
 
 // Update conversation title based on first user message
@@ -222,6 +278,40 @@ newChatButton.addEventListener('click', createNewConversation);
 // Theme toggle
 themeToggle.addEventListener('click', toggleTheme);
 
+// Wallpaper modal handlers
+themesButton.addEventListener('click', () => {
+    wallpaperModal.classList.add('active');
+});
+
+closeWallpaperModal.addEventListener('click', () => {
+    wallpaperModal.classList.remove('active');
+});
+
+wallpaperModal.addEventListener('click', (e) => {
+    if (e.target === wallpaperModal) {
+        wallpaperModal.classList.remove('active');
+    }
+});
+
+// Wallpaper upload
+wallpaperInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            saveWallpaper(event.target.result);
+            wallpaperModal.classList.remove('active');
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Remove wallpaper
+removeWallpaperBtn.addEventListener('click', () => {
+    removeWallpaper();
+    wallpaperModal.classList.remove('active');
+});
+
 chatForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
@@ -246,6 +336,7 @@ messageInput.addEventListener('keydown', (e) => {
 // Initialize
 initializeTheme();
 loadConversations();
+loadWallpaper();
 if (Object.keys(conversations).length === 0) {
     createNewConversation();
 } else {
