@@ -126,22 +126,8 @@ body {
     display: flex;
     flex-direction: column;
     position: relative;
-}
-
-.sidebar-toggle {
-    position: absolute;
-    top: 16px;
-    left: 16px;
-    width: 40px;
-    height: 40px;
-    background-color: var(--bg-input);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    z-index: 100;
-    transition: all 0.2s ease;
+    width: 100%;
+    max-width: calc(100% - 280px);
 }
 
 .sidebar-toggle:hover {
@@ -150,17 +136,16 @@ body {
 }
 
 .chat-container {
-    width: 100%;
-    max-width: 700px;
-    height: 90vh;
-    max-height: 800px;
+    width: calc(100% - 40px);
+    max-width: 600px;
+    height: calc(100vh - 40px);
     background-color: var(--bg-tertiary);
     border-radius: 16px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
-    margin: auto;
+    margin: 20px auto;
     transition: background-color 0.3s ease;
 }
 
@@ -553,6 +538,13 @@ body.light-mode .send-button:disabled {
 .conversation-delete-btn:hover {
     opacity: 1;
 }
+
+
+.sidebar-toggle {
+    display: none;
+}
+
+@media (max-width: 768px) {
     .sidebar {
         position: fixed;
         left: 0;
@@ -566,16 +558,24 @@ body.light-mode .send-button:disabled {
         transform: translateX(-100%);
     }
 
+    .sidebar-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     .main-wrapper {
+        max-width: 100%;
         justify-content: center;
         align-items: center;
         padding: 20px;
     }
 
     .chat-container {
+        width: calc(100% - 40px);
         max-width: 100%;
         height: 90vh;
-        max-height: 800px;
+        margin: 20px;
     }
 }
 
@@ -587,13 +587,15 @@ body.light-mode .send-button:disabled {
 
     .main-wrapper {
         padding: 0;
+        margin: 0;
     }
 
     .chat-container {
-        max-width: 100%;
+        width: 100%;
         height: 100vh;
         max-height: none;
         border-radius: 0;
+        margin: 0;
     }
 
     .chat-header {
@@ -617,7 +619,8 @@ body.light-mode .send-button:disabled {
     }
 
     .send-button {
-        padding: 12px 20px;
+        width: 40px;
+        height: 40px;
     }
 
     .sidebar-toggle {
