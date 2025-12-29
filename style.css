@@ -33,12 +33,53 @@ body.light-mode {
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: var(--bg-primary);
     min-height: 100vh;
     display: flex;
     overflow: hidden;
     transition: background-color 0.3s ease;
+}
+
+.sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background-color: var(--bg-input);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 250;
+}
+
+.sidebar.hidden ~ .sidebar-toggle {
+    left: 20px;
+}
+
+.sidebar:not(.hidden) ~ .sidebar-toggle {
+    left: 300px;
+}
+
+.sidebar-toggle:hover {
+    background-color: var(--bg-quaternary);
+    border-color: var(--border-color);
+}
+.sidebar.hidden {
+    transform: translateX(-100%);
+    width: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    border-right: none;
 }
 
 .sidebar {
@@ -50,6 +91,7 @@ body {
     padding: 20px;
     transition: transform 0.3s ease, background-color 0.3s ease;
     overflow-y: auto;
+    gap: 20px;
 }
 
 .sidebar.hidden {
@@ -92,6 +134,7 @@ body {
     gap: 8px;
     flex: 1;
     overflow-y: auto;
+    margin-bottom: auto;
 }
 
 .conversation-item {
@@ -130,10 +173,6 @@ body {
     max-width: calc(100% - 280px);
 }
 
-.sidebar-toggle:hover {
-    background-color: var(--bg-quaternary);
-    border-color: var(--border-color);
-}
 
 .chat-container {
     width: calc(100% - 40px);
@@ -544,6 +583,7 @@ body.light-mode .send-button:disabled {
     body {
         flex-direction: column;
     }
+
     .sidebar {
         width: 100%;
         height: 60px; /* Slim header-like sidebar for mobile */
@@ -557,13 +597,16 @@ body.light-mode .send-button:disabled {
         overflow-x: auto;
         overflow-y: hidden;
     }
+
     .sidebar-header {
         margin-bottom: 0;
     }
+
     .sidebar-header h2 {
         font-size: 1rem;
         white-space: nowrap;
     }
+
     .new-chat-button {
         width: auto;
         padding: 6px 12px;
@@ -571,44 +614,56 @@ body.light-mode .send-button:disabled {
         font-size: 0.85rem;
         white-space: nowrap;
     }
+
     .conversations-list {
         display: flex;
         flex-direction: row;
         gap: 8px;
         padding: 0;
     }
+
     .conversation-item {
         width: 120px;
         padding: 6px 10px;
         margin-bottom: 0;
         flex-shrink: 0;
     }
+
     .main-wrapper {
         flex: 1;
         padding: 0;
         height: calc(100vh - 60px);
     }
+
     .chat-container {
         width: 100%;
         height: 100%;
         border-radius: 0;
         max-width: none;
     }
+
     .chat-header h1 {
         font-size: 1.1rem;
     }
+
     .chat-messages {
         padding: 12px;
     }
+
     .message {
         max-width: 88%;
         font-size: 0.95rem;
     }
+
     .chat-input-container {
         padding: 10px 12px 24px; /* Space for iPhone home indicator */
     }
+
     .chat-input {
         padding: 10px 14px;
         font-size: 1rem; /* Prevent zoom on focus */
     }
 }
+
+
+

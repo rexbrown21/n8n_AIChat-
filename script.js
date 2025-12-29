@@ -18,6 +18,16 @@ const closeWallpaperModal = document.getElementById('closeWallpaperModal');
 let currentConversationId = null;
 let conversations = {};
 
+// Sidebar toggle functionality
+const sidebarElement = document.getElementById('sidebar');
+const sidebarToggleButton = document.getElementById('sidebarToggle');
+
+if (sidebarToggleButton) {
+    sidebarToggleButton.addEventListener('click', () => {
+        sidebarElement.classList.toggle('hidden');
+    });
+}
+
 // Theme management
 function initializeTheme() {
     const savedTheme = localStorage.getItem('theme');
